@@ -16,9 +16,11 @@ package com.charlesharley.example.android.customdrawablestates;
 
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ListView;
 
 public class HomeActivity extends ListActivity {
 
@@ -27,6 +29,16 @@ public class HomeActivity extends ListActivity {
         super.onCreate(savedInstanceState);
 
         setListAdapter(new ExampleListAdapter());
+    }
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        Log.v("TAG", "====ONListItemClicked===");
+        ExampleListAdapter adapter= (ExampleListAdapter) getListView().getAdapter();
+        Message message= (Message) adapter.getItem(position);
+        message.changeUnreadToRead();
+        adapter.notifyDataSetChanged();
+        super.onListItemClick(l, v, position, id);
     }
 
     private static class ExampleListAdapter extends BaseAdapter {
@@ -88,6 +100,9 @@ public class HomeActivity extends ListActivity {
         private Message(String subject, boolean unread) {
             this.subject = subject;
             this.unread = unread;
+        }
+        public void changeUnreadToRead(){
+            this.unread=false;
         }
 
     }
